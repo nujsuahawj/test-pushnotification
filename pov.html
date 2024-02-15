@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <h1>Test push notification</h1>
+    <button id="notificationButton">Request Notification Permission</button>
+    <script>
+        if ('serviceWorker' in navigator) {
+            navigator.serviceWorker.register('http://127.0.0.1:5501/service-worker.js')
+                .then(function(registration) {
+                    console.log('Service Worker registered with scope:', registration.scope);
+                })
+                .catch(function(error) {
+                    console.error('Service Worker registration failed:', error);
+                });
+        }
+
+        // Request notification permission when the button is clicked
+        document.getElementById('notificationButton').addEventListener('click', function() {
+            if (!("Notification" in window)) {
+                alert("This browser does not support desktop notification");
+            } else {
+                Notification.requestPermission().then(function(permission) {
+                    if (permission === "granted") {
+                        // If permission is granted, create a notification
+                        var notification = new Notification("Hi, Hmong99 !");
+                        console.log('Notification is granted');
+                    } else if (permission === "denied") {
+                        // If permission is denied, prompt the user to enable notifications manually
+                        alert("You have denied notifications. Please enable them in your browser settings.");
+                    } else {
+                        alert("User dismissed the notification permission dialog without making a choice");
+                    }
+                });
+            }
+        });
+    </script>
+</body>
+</html>

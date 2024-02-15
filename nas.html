@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>FCM Token Alert</title>
+</head>
+<body>
+
+<!-- Button to trigger the alert -->
+<button id="myButton">Click Me</button>
+
+<script src="https://www.gstatic.com/firebasejs/8.3.2/firebase-app.js"></script>
+<script src="https://www.gstatic.com/firebasejs/8.3.2/firebase-messaging.js"></script>
+
+<script>
+
+
+    // Your web app's Firebase configuration
+    var firebaseConfig = {
+        key here
+    };
+    // Initialize Firebase
+    firebase.initializeApp(firebaseConfig);
+
+    const messaging = firebase.messaging();
+
+  // Get FCM token
+  function getFCMToken() {
+    return firebase.messaging().getToken()
+      .then((token) => {
+        if (token) {
+          return token;
+        } else {
+          console.log('No Instance ID token available. Request permission to generate one.');
+          alert('No Instance ID token available. Request permission to generate one.');
+        }
+      })
+      .catch((err) => {
+        console.log('An error occurred while retrieving token. ', err);
+        alert('An error occurred while retrieving token. ', err);
+      });
+  }
+
+  // Alert the FCM token when button is clicked
+  document.getElementById("myButton").addEventListener("click", async function() {
+    const fcmToken = await getFCMToken();
+    alert('FCM Token: ' + fcmToken);
+  });
+</script>
+
+</body>
+</html>
